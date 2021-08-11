@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Customer Sattelites</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <style>
+
+    </style>
+</head>
+<body onload="show_customers()">
+
+
+<nav class="navbar navbar-expand-md bg-dark navbar-dark">
+    <a class="navbar-brand" href="/">Home Page</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="collapsibleNavbar">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" href="/">Space Crafts</a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="#">Launch Vehicles</a>
+            </li>
+
+            <li class="nav-item">
+                <a class="nav-link" href="/launchers.html">Customer Satellites</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+<br>
+
+<div class="container">
+    <label for="name">Search Launch Vehicles</label>
+    <input type="text" class="form-control" placeholder="Search Name" id="name" oninput="find()" onchange="find()">
+    <h3 class="h3">Below is the launch vehicles name</h3>
+    <table class="table table-bordered table-striped table-hover">
+        <thead>
+
+        <tr>
+            <th>Country</th>
+            <th>Name</th>
+            <th>Launch Date</th>
+            <th>Launcher</th>
+            <th>Mass</th>
+
+
+
+        </tr>
+
+
+        </thead>
+        <tbody id="table_body">
+        <!--
+        <tr>
+          <td>John</td>
+
+        </tr>
+        <tr>
+          <td>Mary</td>
+
+        </tr>
+        <tr>
+          <td>July</td>
+
+        </tr>
+        -->
+
+        </tbody>
+    </table>
+</div>
+
+</body>
+<script type="text/javascript">
+    const table_body = document.getElementById("table_body")
+    let names = []
+    function show_customers() {
+        $.get("https://isroapi.padmashreejha.repl.co/customers", function (data){
+            const satellites = data['customer_satellites']
+            for (let satellite of satellites) {
+                console.log(satellite)
+                let name = satellite['id']
+                let country = satellite['country']
+                let launch_date = satellite['launch_date']
+                let launcher = satellite['launcher']
+                let mass = satellite['mass'] + "Kg"
+
+                names.push(name)
+
+                let tr = document.createElement("tr")
+                tr.setAttribute("id", name)
+                let name_tag = document.createElement("td")
+
+                let country_tag = document.createElement("td")
+
+                let launch_date_tag = document.createElement("td")
+
+                let launcher_tag = document.createElement("td")
+
+                let mass_tag = document.createElement("td")
+
+                name_tag.innerText = name
+
+                country_tag.innerText = country
+
+                launch_date_tag.innerText = launch_date
+
+                launcher_tag.innerText = launcher
+
+                mass_tag.innerText = mass
+
+                tr.append(country_tag)
+                tr.append(name_tag)
+                tr.append(launch_date_tag)
+                tr.append(launcher)
+                tr.append(mass_tag)
+                table_body.append(tr)
+
+
+
+
+            }
+
+            window.names = names
+
+
+        });
+
+    }
+
+    function find() {
+        let name_in_box = document.getElementById("name").value
+        const names = window.names
+
+        for (let namesKey in names) {
+            let name = names[namesKey]
+            console.log(name_in_box.toLowerCase())
+            console.log(name.toLowerCase())
+            let name_to_be_checked = name.toLowerCase();
+            if (!name_to_be_checked.includes(name_in_box.toLowerCase())){
+                document.getElementById(name).style.display = "none"
+
+            }
+            else {
+                document.getElementById(name).style.display = ""
+            }
+
+
+        }
+
+
+    }
+
+</script>
+
+</html>
+
+
